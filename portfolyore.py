@@ -29,7 +29,7 @@ for row in range(0,len(train.index)):
     trainheadlines.append(' '.join(str(x) for x in train.iloc[row,2:27]))
 
 print(trainheadlines)
-"""
+
 basicvectorizer = CountVectorizer()
 basictrain = basicvectorizer.fit_transform(trainheadlines)
 print(basictrain.shape)
@@ -45,4 +45,13 @@ predictions = basicmodel.predict(basictest)
 
 
 print(pd.crosstab(test["Label"], predictions, rownames=["Actual"], colnames=["Predicted"]))
-"""
+
+
+basicwords = basicvectorizer.get_feature_names()
+basiccoeffs = basicmodel.coef_.tolist()[0]
+coeffdf = pd.DataFrame({'Word' : basicwords,
+                        'Coefficient' : basiccoeffs})
+coeffdf = coeffdf.sort_values(['Coefficient', 'Word'], ascending=[0, 1])
+
+
+print(coeffdf.head(10))
